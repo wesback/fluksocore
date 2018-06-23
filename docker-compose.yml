@@ -1,0 +1,17 @@
+version: '2.0'
+
+services:
+  fluksocore:
+    image: wesback/fluksocore
+    restart: always
+    container_name: fluksocore
+    environment:
+      - FluksoServer:FluksoIP=###YOURIP###
+      - EventHubs:EHConnectionString=###EHConnectionstring###
+      - EventHubs:EHEntityPath=fluksoeh 
+      - Sensors:Electricity=###SensorIDElectricity###
+      - Sensors:Water=###SensorIDWater###
+      - Sensors:Gas=###SensorIDGas###
+      - Output:Console=false
+      - Output:EventHubs=true
+  
