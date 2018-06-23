@@ -6,7 +6,7 @@ services:
     restart: always
     container_name: fluksocore
     environment:
-      - FluksoServer:FluksoIP=###YOURIP###
+      - FluksoServer:FluksoIP=###YOURFLUKSOIP###
       - EventHubs:EHConnectionString=###EHConnectionstring###
       - EventHubs:EHEntityPath=fluksoeh 
       - Sensors:Electricity=###SensorIDElectricity###

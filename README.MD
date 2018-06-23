@@ -10,6 +10,7 @@ It will send the output to the console or Azure Event Hubs, feel free to extend 
 
 ### Getting started
 I have created this to run on a Raspberry PI using Docker.  You can find the deployment scripts for Azure in the Terraform folder.
+For development replace the values marked with ### in appsettings.json.  The docker-compose.yml file contains the same settings for execution in the container.
 
 #### Terraform
 Go to the Terraform folder and execute the following
@@ -22,7 +23,7 @@ terraform apply out.tfplan
 
 #### docker-compose
 You can find the sensor id in your user settings on https://www.flukso.net/.
-Replace the values between {}.
+Replace the values that are marked with ###. 
 
 ```
 version: '2.0'
@@ -33,12 +34,12 @@ services:
     restart: always
     container_name: fluksocore
     environment:
-      - FluksoServer:FluksoIP={ipaddress}
-      - EventHubs:EHConnectionString=Endpoint=sb://{namespace}.servicebus.windows.net/;SharedAccessKeyName={keyname};SharedAccessKey={key}
-      - EventHubs:EHEntityPath={ehpath} 
-      - Sensors:Electricity={sensoride}
-      - Sensors:Water={sensoridw}
-      - Sensors:Gas={sensoridg}
+      - FluksoServer:FluksoIP=###ipaddress###
+      - EventHubs:EHConnectionString=Endpoint=sb://###namespace###.servicebus.windows.net/;SharedAccessKeyName=###keyname###;SharedAccessKey=###key###
+      - EventHubs:EHEntityPath=###ehpath### 
+      - Sensors:Electricity=###sensoride###
+      - Sensors:Water=###sensoridw###
+      - Sensors:Gas=###sensoridg###
       - Output:Console=false
       - Output:EventHubs=true
 ```
