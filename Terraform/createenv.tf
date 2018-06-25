@@ -5,7 +5,7 @@ resource "azurerm_resource_group" "rgflukso" {
 }
 
 resource "azurerm_eventhub_namespace" "ehnsflusko" {
-  name                = "fluksoehns"
+  name                = "${var.ehnsname}"
   location            = "${azurerm_resource_group.rgflukso.location}"
   resource_group_name = "${azurerm_resource_group.rgflukso.name}"
   sku                 = "Standard"
@@ -17,7 +17,7 @@ resource "azurerm_eventhub_namespace" "ehnsflusko" {
 }
 
 resource "azurerm_eventhub" "ehflukso" {
-  name                = "fluksoeh"
+  name                = "${var.ehname}"
   namespace_name      = "${azurerm_eventhub_namespace.ehnsflusko.name}"
   resource_group_name = "${azurerm_resource_group.rgflukso.name}"
   partition_count     = 2
@@ -48,7 +48,7 @@ resource "azurerm_eventhub_authorization_rule" "ehfluksoauth" {
 }
 
 resource "azurerm_sql_server" "sqlsrvr" {
-  name                         = "fluksosql"
+  name                         = "${var.sqlsrvrname}"
   resource_group_name          = "${azurerm_resource_group.rgflukso.name}"
   location                     = "${azurerm_resource_group.rgflukso.location}"
   version                      = "12.0"
@@ -62,10 +62,14 @@ resource "azurerm_sql_database" "sqldb" {
   location            = "${azurerm_sql_server.sqlsrvr.location}"
   server_name         = "${azurerm_sql_server.sqlsrvr.name}"
   edition             = "Basic"
+
+  provisioner "local-exec" {
+    command = "sqlcmd -S ${azurerm_sql_server.sqlsrvr.fully_qualified_domain_name} -d ${azurerm_sql_database.sqldb.name} -U ${var.sqluser} -P ${var.sqlpassword} -i './SQL/sensordata.sql'"
+  }
 }
 
 resource "azurerm_storage_account" "fluksostorage" {
-  name                     = "fluksoblob"
+  name                     = "${var.storagename}"
   resource_group_name      = "${azurerm_resource_group.rgflukso.name}"
   location                 = "${azurerm_resource_group.rgflukso.location}"
   account_tier             = "Standard"
@@ -73,7 +77,7 @@ resource "azurerm_storage_account" "fluksostorage" {
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "fluksoacr"
+  name                = "${var.acrname}"
   resource_group_name = "${azurerm_resource_group.rgflukso.name}"
   location            = "${azurerm_resource_group.rgflukso.location}"
   admin_enabled       = true
